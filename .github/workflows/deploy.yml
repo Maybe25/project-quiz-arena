@@ -73,6 +73,9 @@ jobs:
         working-directory: infrastructure/terraform
         run: terraform apply -auto-approve -target=aws_iam_role_policy.github_actions_deploy
 
+      - name: Esperar propagación IAM
+        run: sleep 15
+
       - name: Terraform Apply
         working-directory: infrastructure/terraform
         run: terraform apply -auto-approve
