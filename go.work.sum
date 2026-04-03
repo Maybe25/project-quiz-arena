@@ -1,0 +1,4 @@
+github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.13.12/go.mod h1:5WPGXfp9+ss7gYsZ5QjJeY16qTpCLaIcQItE7Yw7ld4=
+github.com/aws/aws-sdk-go-v2/service/dynamodbstreams v1.20.3/go.mod h1:fw1lVv+e9z9UIaVsVjBXoC8QxZ+ibOtRtzfELRJZWs8=
+github.com/aws/aws-sdk-go-v2/service/sqs v1.31.4 h1:mE2ysZMEeQ3ulHWs4mmc4fZEhOfeY1o6QXAfDqjbSgw=
+github.com/aws/aws-sdk-go-v2/service/sqs v1.31.4/go.mod h1:lCN2yKnj+Sp9F6UzpoPPTir+tSaC9Jwf6LcmTqnXFZw=

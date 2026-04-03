@@ -1,0 +1,10 @@
+go 1.24
+
+use (
+	./internal
+	./lambdas/ws-connect
+	./lambdas/ws-disconnect
+	./lambdas/ws-message
+	./lambdas/room-manager
+	./lambdas/broadcaster
+)

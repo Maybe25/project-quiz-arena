@@ -1,0 +1,13 @@
+# Binarios compilados (se regeneran con build.bat/build.sh)
+bin/
+
+# Terraform state (contiene ARNs, IPs, datos sensibles — NUNCA commitear)
+infrastructure/terraform/.terraform/
+infrastructure/terraform/.terraform.lock.hcl
+infrastructure/terraform/terraform.tfstate
+infrastructure/terraform/terraform.tfstate.backup
+infrastructure/terraform/*.tfvars
+
+# Go
+*.exe
+*.test

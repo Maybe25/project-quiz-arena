@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(go version:*)",
+      "Bash(terraform version:*)",
+      "Bash(cmd.exe /c \"go version && terraform version\")"
+    ]
+  },
+  "enabledPlugins": {
+    "aws-common@aws-skills": true,
+    "aws-cdk@aws-skills": true,
+    "aws-cost-ops@aws-skills": true,
+    "serverless-eda@aws-skills": true,
+    "aws-agentic-ai@aws-skills": true
+  }
+}
