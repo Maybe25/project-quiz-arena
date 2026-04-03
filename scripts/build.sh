@@ -31,9 +31,12 @@ build_lambda() {
   echo "  ✓ $out"
 }
 
-# Lista de Lambdas a compilar (agregar más en futuros milestones)
+# Lista de Lambdas a compilar
 build_lambda "ws-connect"
 build_lambda "ws-disconnect"
+build_lambda "ws-message"
+build_lambda "room-manager"
+build_lambda "broadcaster"
 
 echo ""
 echo "Build completo. Binarios en $BIN_DIR/"

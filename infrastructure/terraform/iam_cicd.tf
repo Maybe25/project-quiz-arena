@@ -135,6 +135,8 @@ resource "aws_iam_role_policy" "github_actions_deploy" {
           "sqs:SetQueueAttributes",
           "sqs:ListQueues",
           "sqs:TagQueue",
+          "sqs:ListQueueTags",
+          "sqs:UntagQueue",
         ]
         Resource = "arn:aws:sqs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:${var.project_name}-*"
       },
