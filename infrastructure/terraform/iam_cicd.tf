@@ -82,6 +82,7 @@ resource "aws_iam_role_policy" "github_actions_deploy" {
           "lambda:AddPermission",
           "lambda:RemovePermission",
           "lambda:ListFunctions",
+          "lambda:ListVersionsByFunction",
           "lambda:TagResource",
           "lambda:CreateEventSourceMapping",
           "lambda:UpdateEventSourceMapping",

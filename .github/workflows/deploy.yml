@@ -69,6 +69,10 @@ jobs:
         working-directory: infrastructure/terraform
         run: terraform init
 
+      - name: Terraform Apply IAM (bootstrap permisos)
+        working-directory: infrastructure/terraform
+        run: terraform apply -auto-approve -target=aws_iam_role_policy.github_actions_deploy
+
       - name: Terraform Apply
         working-directory: infrastructure/terraform
         run: terraform apply -auto-approve
