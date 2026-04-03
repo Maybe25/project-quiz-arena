@@ -142,14 +142,22 @@ resource "aws_iam_role_policy" "github_actions_deploy" {
       },
 
       # CloudWatch Logs: crear y gestionar log groups
+      # DescribeLogGroups requiere resource "*" — es una acción List y AWS
+      # no la evalúa contra ARNs específicos de log group.
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:DescribeLogGroups",
+          "logs:ListTagsLogGroup",
+        ]
+        Resource = "*"
+      },
       {
         Effect = "Allow"
         Action = [
           "logs:CreateLogGroup",
           "logs:DeleteLogGroup",
           "logs:PutRetentionPolicy",
-          "logs:DescribeLogGroups",
-          "logs:ListTagsLogGroup",
           "logs:TagLogGroup",
         ]
         Resource = "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.project_name}-*"
