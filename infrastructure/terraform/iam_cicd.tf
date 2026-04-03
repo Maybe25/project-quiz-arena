@@ -70,25 +70,24 @@ resource "aws_iam_role_policy" "github_actions_deploy" {
     Statement = [
 
       # Lambda: crear, actualizar y configurar funciones
+      # lambda:Get* y lambda:List* cubren todas las lecturas que hace el
+      # provider de Terraform durante el refresh (GetFunctionCodeSigningConfig,
+      # ListVersionsByFunction, GetPolicy, GetFunctionConcurrency, etc.)
       {
         Effect = "Allow"
         Action = [
+          "lambda:Get*",
+          "lambda:List*",
           "lambda:CreateFunction",
           "lambda:UpdateFunctionCode",
           "lambda:UpdateFunctionConfiguration",
-          "lambda:GetFunction",
-          "lambda:GetFunctionConfiguration",
           "lambda:DeleteFunction",
           "lambda:AddPermission",
           "lambda:RemovePermission",
-          "lambda:ListFunctions",
-          "lambda:ListVersionsByFunction",
           "lambda:TagResource",
           "lambda:CreateEventSourceMapping",
           "lambda:UpdateEventSourceMapping",
           "lambda:DeleteEventSourceMapping",
-          "lambda:GetEventSourceMapping",
-          "lambda:ListEventSourceMappings",
         ]
         Resource = "*"
       },
