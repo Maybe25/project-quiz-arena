@@ -236,6 +236,7 @@ resource "aws_iam_role_policy" "github_actions_deploy" {
           "s3:GetBucketCORS",
           "s3:GetAccelerateConfiguration",
           "s3:GetBucketWebsite",
+          "s3:GetReplicationConfiguration",   # Terraform lee esto al hacer refresh del estado
         ]
         Resource = [
           "arn:aws:s3:::${var.project_name}-questions-${data.aws_caller_identity.current.account_id}",
@@ -256,6 +257,14 @@ resource "aws_iam_role_policy" "github_actions_deploy" {
           "states:UntagResource",
         ]
         Resource = "arn:aws:states:${var.aws_region}:${data.aws_caller_identity.current.account_id}:stateMachine:${var.project_name}-*"
+      },
+
+      # states:ValidateStateMachineDefinition es una acción global — no acepta ARN específico.
+      # Terraform la llama antes de crear el state machine para validar el JSON ASL.
+      {
+        Effect   = "Allow"
+        Action   = ["states:ValidateStateMachineDefinition"]
+        Resource = "*"
       },
 
       # DynamoDB: locking del estado de Terraform
