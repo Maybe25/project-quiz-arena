@@ -90,9 +90,9 @@ resource "aws_lambda_function" "ws_message" {
 
   environment {
     variables = {
-      DYNAMODB_TABLE        = aws_dynamodb_table.main.name
-      SQS_ROOM_MANAGER_URL  = aws_sqs_queue.room_manager.url
-      SQS_QUIZ_ENGINE_URL   = "" # se llena en M3
+      DYNAMODB_TABLE       = aws_dynamodb_table.main.name
+      SQS_ROOM_MANAGER_URL = aws_sqs_queue.room_manager.url
+      SQS_QUIZ_ENGINE_URL  = aws_sqs_queue.quiz_engine.url
     }
   }
 }

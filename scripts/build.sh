@@ -37,6 +37,8 @@ build_lambda "ws-disconnect"
 build_lambda "ws-message"
 build_lambda "room-manager"
 build_lambda "broadcaster"
+build_lambda "quiz-engine"
+build_lambda "round-ender"
 
 echo ""
 echo "Build completo. Binarios en $BIN_DIR/"

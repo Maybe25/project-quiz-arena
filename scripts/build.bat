@@ -57,6 +57,24 @@ if %errorlevel% neq 0 (
 )
 echo   OK: bin\broadcaster\bootstrap
 
+echo Compilando quiz-engine...
+mkdir "%BIN_DIR%\quiz-engine" 2>nul
+go build -tags lambda.norpc -ldflags="-s -w" -o "%BIN_DIR%\quiz-engine\bootstrap" "%REPO_ROOT%\lambdas\quiz-engine\handler.go"
+if %errorlevel% neq 0 (
+    echo ERROR compilando quiz-engine
+    exit /b 1
+)
+echo   OK: bin\quiz-engine\bootstrap
+
+echo Compilando round-ender...
+mkdir "%BIN_DIR%\round-ender" 2>nul
+go build -tags lambda.norpc -ldflags="-s -w" -o "%BIN_DIR%\round-ender\bootstrap" "%REPO_ROOT%\lambdas\round-ender\handler.go"
+if %errorlevel% neq 0 (
+    echo ERROR compilando round-ender
+    exit /b 1
+)
+echo   OK: bin\round-ender\bootstrap
+
 echo.
 echo Build completo. Siguiente paso:
 echo   cd infrastructure\terraform

@@ -7,4 +7,6 @@ use (
 	./lambdas/ws-message
 	./lambdas/room-manager
 	./lambdas/broadcaster
+	./lambdas/quiz-engine
+	./lambdas/round-ender
 )

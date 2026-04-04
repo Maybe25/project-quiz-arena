@@ -1,0 +1,72 @@
+[
+  {
+    "id": "q001",
+    "text": "¿Cuál es la capital de Francia?",
+    "options": ["Madrid", "París", "Roma", "Berlín"],
+    "correct": 1,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q002",
+    "text": "¿Cuántos planetas tiene el Sistema Solar?",
+    "options": ["7", "8", "9", "10"],
+    "correct": 1,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q003",
+    "text": "¿Cuál es el elemento químico con símbolo Au?",
+    "options": ["Plata", "Aluminio", "Oro", "Cobre"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q004",
+    "text": "¿En qué año llegó el hombre a la Luna por primera vez?",
+    "options": ["1965", "1967", "1969", "1971"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q005",
+    "text": "¿Cuál es el océano más grande del mundo?",
+    "options": ["Atlántico", "Índico", "Ártico", "Pacífico"],
+    "correct": 3,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q006",
+    "text": "¿Quién escribió 'Cien años de soledad'?",
+    "options": ["Mario Vargas Llosa", "Jorge Luis Borges", "Gabriel García Márquez", "Pablo Neruda"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q007",
+    "text": "¿Cuál es el hueso más largo del cuerpo humano?",
+    "options": ["Húmero", "Tibia", "Fémur", "Radio"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q008",
+    "text": "¿Cuántos lados tiene un hexágono?",
+    "options": ["5", "6", "7", "8"],
+    "correct": 1,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q009",
+    "text": "¿Cuál es el país más grande del mundo por superficie?",
+    "options": ["China", "Canadá", "Estados Unidos", "Rusia"],
+    "correct": 3,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q010",
+    "text": "¿A qué velocidad aproximada viaja la luz?",
+    "options": ["150,000 km/s", "200,000 km/s", "300,000 km/s", "400,000 km/s"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  }
+]

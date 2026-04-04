@@ -210,6 +210,54 @@ resource "aws_iam_role_policy" "github_actions_deploy" {
         ]
       },
 
+      # S3: gestionar el bucket de preguntas del quiz (M3)
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:CreateBucket",
+          "s3:DeleteBucket",
+          "s3:GetBucketAcl",
+          "s3:GetBucketVersioning",
+          "s3:PutBucketVersioning",
+          "s3:GetBucketPublicAccessBlock",
+          "s3:PutBucketPublicAccessBlock",
+          "s3:GetBucketPolicy",
+          "s3:ListBucket",
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+          "s3:GetBucketTagging",
+          "s3:PutBucketTagging",
+          "s3:GetLifecycleConfiguration",
+          "s3:GetEncryptionConfiguration",
+          "s3:GetBucketObjectLockConfiguration",
+          "s3:GetBucketLogging",
+          "s3:GetBucketRequestPayment",
+          "s3:GetBucketCORS",
+          "s3:GetAccelerateConfiguration",
+          "s3:GetBucketWebsite",
+        ]
+        Resource = [
+          "arn:aws:s3:::${var.project_name}-questions-${data.aws_caller_identity.current.account_id}",
+          "arn:aws:s3:::${var.project_name}-questions-${data.aws_caller_identity.current.account_id}/*",
+        ]
+      },
+
+      # Step Functions: gestionar state machines del proyecto (M3)
+      {
+        Effect = "Allow"
+        Action = [
+          "states:CreateStateMachine",
+          "states:UpdateStateMachine",
+          "states:DeleteStateMachine",
+          "states:DescribeStateMachine",
+          "states:ListTagsForResource",
+          "states:TagResource",
+          "states:UntagResource",
+        ]
+        Resource = "arn:aws:states:${var.aws_region}:${data.aws_caller_identity.current.account_id}:stateMachine:${var.project_name}-*"
+      },
+
       # DynamoDB: locking del estado de Terraform
       {
         Effect = "Allow"

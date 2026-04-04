@@ -44,12 +44,14 @@ jobs:
 
       - name: Download dependencies
         run: |
-          cd internal              && go mod download && cd ..
-          cd lambdas/ws-connect    && go mod download && cd ../..
-          cd lambdas/ws-disconnect && go mod download && cd ../..
-          cd lambdas/ws-message    && go mod download && cd ../..
-          cd lambdas/room-manager  && go mod download && cd ../..
-          cd lambdas/broadcaster   && go mod download && cd ../..
+          cd internal                && go mod download && cd ..
+          cd lambdas/ws-connect      && go mod download && cd ../..
+          cd lambdas/ws-disconnect   && go mod download && cd ../..
+          cd lambdas/ws-message      && go mod download && cd ../..
+          cd lambdas/room-manager    && go mod download && cd ../..
+          cd lambdas/broadcaster     && go mod download && cd ../..
+          cd lambdas/quiz-engine     && go mod download && cd ../..
+          cd lambdas/round-ender     && go mod download && cd ../..
 
       - name: Build all Lambdas (Linux ARM64)
         run: bash scripts/build.sh
@@ -79,6 +81,19 @@ jobs:
       - name: Terraform Apply
         working-directory: infrastructure/terraform
         run: terraform apply -auto-approve
+
+      # Sincronizar preguntas al bucket S3.
+      # aws s3 sync es idempotente: solo sube los archivos que cambiaron.
+      # Si el contenido es idéntico, no hace ninguna request de escritura.
+      # El bucket name lo leemos del output de Terraform para no hardcodearlo.
+      - name: Sync questions to S3
+        working-directory: infrastructure/terraform
+        run: |
+          BUCKET=$(terraform output -raw s3_questions_bucket)
+          aws s3 sync ../../questions/ s3://$BUCKET/questions/ \
+            --delete \
+            --only-show-errors
+          echo "✓ Questions synced to s3://$BUCKET/questions/"
 
       # Mostrar outputs útiles al final del deploy (URL del WebSocket, etc.)
       - name: Show deployment outputs

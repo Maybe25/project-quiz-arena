@@ -116,7 +116,12 @@ type RoundStartPayload struct {
 
 // RoundEndPayload se envía al terminar cada ronda.
 type RoundEndPayload struct {
-	RoundNumber    int          `json:"roundNumber"`
-	CorrectAnswer  int          `json:"correctAnswer"`
-	Scores         []PlayerInfo `json:"scores"`
+	RoundNumber   int          `json:"roundNumber"`
+	CorrectAnswer int          `json:"correctAnswer"`
+	Scores        []PlayerInfo `json:"scores"`
+}
+
+// GameEndPayload se envía cuando termina la partida completa (podio final).
+type GameEndPayload struct {
+	Scores []PlayerInfo `json:"scores"`
 }

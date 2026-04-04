@@ -45,24 +45,28 @@ jobs:
 
       - name: Download dependencies
         run: |
-          cd internal        && go mod download && cd ..
-          cd lambdas/ws-connect    && go mod download && cd ../..
-          cd lambdas/ws-disconnect && go mod download && cd ../..
-          cd lambdas/ws-message    && go mod download && cd ../..
-          cd lambdas/room-manager  && go mod download && cd ../..
-          cd lambdas/broadcaster   && go mod download && cd ../..
+          cd internal                && go mod download && cd ..
+          cd lambdas/ws-connect      && go mod download && cd ../..
+          cd lambdas/ws-disconnect   && go mod download && cd ../..
+          cd lambdas/ws-message      && go mod download && cd ../..
+          cd lambdas/room-manager    && go mod download && cd ../..
+          cd lambdas/broadcaster     && go mod download && cd ../..
+          cd lambdas/quiz-engine     && go mod download && cd ../..
+          cd lambdas/round-ender     && go mod download && cd ../..
 
       - name: Build all Lambdas (Linux ARM64)
         run: bash scripts/build.sh
 
       - name: Go vet (análisis estático)
         run: |
-          cd internal        && go vet ./... && cd ..
-          cd lambdas/ws-connect    && go vet ./... && cd ../..
-          cd lambdas/ws-disconnect && go vet ./... && cd ../..
-          cd lambdas/ws-message    && go vet ./... && cd ../..
-          cd lambdas/room-manager  && go vet ./... && cd ../..
-          cd lambdas/broadcaster   && go vet ./... && cd ../..
+          cd internal                && go vet ./... && cd ..
+          cd lambdas/ws-connect      && go vet ./... && cd ../..
+          cd lambdas/ws-disconnect   && go vet ./... && cd ../..
+          cd lambdas/ws-message      && go vet ./... && cd ../..
+          cd lambdas/room-manager    && go vet ./... && cd ../..
+          cd lambdas/broadcaster     && go vet ./... && cd ../..
+          cd lambdas/quiz-engine     && go vet ./... && cd ../..
+          cd lambdas/round-ender     && go vet ./... && cd ../..
 
       # Subir los binarios compilados como artifacts para que el job de plan los use
       - name: Upload build artifacts
