@@ -252,6 +252,7 @@ resource "aws_iam_role_policy" "github_actions_deploy" {
           "states:UpdateStateMachine",
           "states:DeleteStateMachine",
           "states:DescribeStateMachine",
+          "states:ListStateMachineVersions",
           "states:ListTagsForResource",
           "states:TagResource",
           "states:UntagResource",
