@@ -273,6 +273,8 @@ resource "aws_iam_role_policy" "github_actions_deploy" {
           "events:PutTargets",
           "events:RemoveTargets",
           "events:ListTagsForResource",
+          "events:ListTargetsByRule",
+          "events:ListRuleNamesByTarget",
           "events:TagResource",
           "events:UntagResource",
         ]
