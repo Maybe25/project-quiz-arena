@@ -107,6 +107,8 @@ func processRecord(ctx context.Context, record events.SQSMessage) error {
 		return handleStartGame(ctx, msg)
 	case wsevents.ActionSubmitAnswer:
 		return handleSubmitAnswer(ctx, msg)
+	case wsevents.ActionGetLeaderboard:
+		return handleGetLeaderboard(ctx, msg)
 	default:
 		logger.WarnContext(ctx, "unhandled action", slog.String("action", string(msg.Action)))
 		return nil
@@ -283,6 +285,30 @@ func handleSubmitAnswer(ctx context.Context, msg sqsBody) error {
 		slog.Int("answer", payload.Answer),
 	)
 	return nil
+}
+
+// handleGetLeaderboard consulta el top-10 y lo envía al solicitante.
+func handleGetLeaderboard(ctx context.Context, msg sqsBody) error {
+	top, err := internaldynamo.GetTopPlayers(ctx, dbClient, 10)
+	if err != nil {
+		return fmt.Errorf("get leaderboard: %w", err)
+	}
+
+	entries := make([]wsevents.LeaderboardEntry, len(top))
+	for i, s := range top {
+		entries[i] = wsevents.LeaderboardEntry{
+			PlayerID:    s.PlayerID,
+			Username:    s.Username,
+			TotalScore:  s.TotalScore,
+			GamesPlayed: s.GamesPlayed,
+			Wins:        s.Wins,
+		}
+	}
+
+	return wsPoster.PostMessage(ctx, msg.ConnectionID, wsevents.OutboundMessage{
+		Type:    wsevents.TypeLeaderboard,
+		Payload: wsevents.LeaderboardPayload{Entries: entries},
+	})
 }
 
 // loadQuestionsFromS3 descarga y parsea el JSON de preguntas del bucket S3.

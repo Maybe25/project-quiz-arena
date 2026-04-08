@@ -9,4 +9,5 @@ use (
 	./lambdas/broadcaster
 	./lambdas/quiz-engine
 	./lambdas/round-ender
+	./lambdas/stats-recorder
 )

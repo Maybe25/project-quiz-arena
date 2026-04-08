@@ -18,8 +18,9 @@ const (
 	ActionCreateRoom    Action = "CREATE_ROOM"
 	ActionJoinRoom      Action = "JOIN_ROOM"
 	ActionLeaveRoom     Action = "LEAVE_ROOM"
-	ActionStartGame     Action = "START_GAME"
-	ActionSubmitAnswer  Action = "SUBMIT_ANSWER"
+	ActionStartGame      Action = "START_GAME"
+	ActionSubmitAnswer   Action = "SUBMIT_ANSWER"
+	ActionGetLeaderboard Action = "GET_LEADERBOARD"
 )
 
 // --- Tipos de mensajes outbound (lo que el servidor envía) ---
@@ -35,6 +36,7 @@ const (
 	TypeRoundStart    MessageType = "ROUND_START"
 	TypeRoundEnd      MessageType = "ROUND_END"
 	TypeGameEnd       MessageType = "GAME_END"
+	TypeLeaderboard   MessageType = "LEADERBOARD"
 	TypeError         MessageType = "ERROR"
 )
 
@@ -124,4 +126,18 @@ type RoundEndPayload struct {
 // GameEndPayload se envía cuando termina la partida completa (podio final).
 type GameEndPayload struct {
 	Scores []PlayerInfo `json:"scores"`
+}
+
+// LeaderboardEntry es una entrada del ranking global.
+type LeaderboardEntry struct {
+	PlayerID    string `json:"playerId"`
+	Username    string `json:"username"`
+	TotalScore  int    `json:"totalScore"`
+	GamesPlayed int    `json:"gamesPlayed"`
+	Wins        int    `json:"wins"`
+}
+
+// LeaderboardPayload es la respuesta a GET_LEADERBOARD.
+type LeaderboardPayload struct {
+	Entries []LeaderboardEntry `json:"entries"`
 }

@@ -44,8 +44,9 @@ func init() {
 		wsevents.ActionCreateRoom:   os.Getenv("SQS_ROOM_MANAGER_URL"),
 		wsevents.ActionJoinRoom:     os.Getenv("SQS_ROOM_MANAGER_URL"),
 		wsevents.ActionLeaveRoom:    os.Getenv("SQS_ROOM_MANAGER_URL"),
-		wsevents.ActionStartGame:    os.Getenv("SQS_QUIZ_ENGINE_URL"), // M3: quiz-engine maneja el inicio
-		wsevents.ActionSubmitAnswer: os.Getenv("SQS_QUIZ_ENGINE_URL"),
+		wsevents.ActionStartGame:      os.Getenv("SQS_QUIZ_ENGINE_URL"),
+		wsevents.ActionSubmitAnswer:   os.Getenv("SQS_QUIZ_ENGINE_URL"),
+		wsevents.ActionGetLeaderboard: os.Getenv("SQS_QUIZ_ENGINE_URL"),
 	}
 }
 

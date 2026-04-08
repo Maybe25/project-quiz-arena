@@ -75,6 +75,15 @@ if %errorlevel% neq 0 (
 )
 echo   OK: bin\round-ender\bootstrap
 
+echo Compilando stats-recorder...
+mkdir "%BIN_DIR%\stats-recorder" 2>nul
+go build -tags lambda.norpc -ldflags="-s -w" -o "%BIN_DIR%\stats-recorder\bootstrap" "%REPO_ROOT%\lambdas\stats-recorder\handler.go"
+if %errorlevel% neq 0 (
+    echo ERROR compilando stats-recorder
+    exit /b 1
+)
+echo   OK: bin\stats-recorder\bootstrap
+
 echo.
 echo Build completo. Siguiente paso:
 echo   cd infrastructure\terraform

@@ -27,6 +27,26 @@ resource "aws_dynamodb_table" "main" {
     type = "S"
   }
 
+  # GSI para leaderboard global (M4).
+  # Todos los items PLAYER#<id> STATS tienen GSI1PK="LEADERBOARD" y totalScore=<N>.
+  # Esto permite: Query GSI1PK="LEADERBOARD" ORDER BY totalScore DESC LIMIT 10
+  attribute {
+    name = "GSI1PK"
+    type = "S"
+  }
+
+  attribute {
+    name = "totalScore"
+    type = "N"
+  }
+
+  global_secondary_index {
+    name            = "leaderboard-index"
+    hash_key        = "GSI1PK"
+    range_key       = "totalScore"
+    projection_type = "ALL"
+  }
+
   # TTL: DynamoDB lee el campo "expiresAt" (Unix timestamp en segundos)
   # y borra automáticamente los items cuyo timestamp ya pasó.
   # Esto limpia conexiones WebSocket muertas sin código adicional.

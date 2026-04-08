@@ -120,8 +120,9 @@ resource "aws_lambda_function" "round_ender" {
 
   environment {
     variables = {
-      DYNAMODB_TABLE = aws_dynamodb_table.main.name
-      WS_ENDPOINT    = "https://${aws_apigatewayv2_api.ws.id}.execute-api.${var.aws_region}.amazonaws.com/${var.environment}"
+      DYNAMODB_TABLE        = aws_dynamodb_table.main.name
+      WS_ENDPOINT           = "https://${aws_apigatewayv2_api.ws.id}.execute-api.${var.aws_region}.amazonaws.com/${var.environment}"
+      EVENTBRIDGE_BUS_NAME  = aws_cloudwatch_event_bus.quizarena.name
     }
   }
 }

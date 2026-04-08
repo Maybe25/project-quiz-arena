@@ -19,14 +19,18 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log/slog"
 	"os"
 	"sync"
 
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/eventbridge"
+	ebtypes "github.com/aws/aws-sdk-go-v2/service/eventbridge/types"
 
 	internaldynamo "github.com/quizarena/internal/dynamo"
 	wsevents "github.com/quizarena/internal/events"
@@ -36,6 +40,7 @@ import (
 var (
 	logger   *slog.Logger
 	dbClient *dynamodb.Client
+	ebClient *eventbridge.Client
 	wsPoster wsapi.Poster
 	initOnce sync.Once
 	initErr  error
@@ -138,6 +143,12 @@ func handler(ctx context.Context, state sfnState) (sfnState, error) {
 
 		logger.InfoContext(ctx, "game finished", slog.String("roomId", state.RoomID))
 
+		// Publicar evento game.ended a EventBridge para que stats-recorder actualice el leaderboard.
+		if err := publishGameEnded(ctx, state.RoomID, players); err != nil {
+			logger.ErrorContext(ctx, "publish game.ended failed", slog.String("error", err.Error()))
+			// No retornamos error — el juego terminó correctamente aunque fallen las stats.
+		}
+
 		// Step Functions: hasMoreRounds=false → el Choice state va a GameComplete (Succeed).
 		return sfnState{HasMoreRounds: false}, nil
 	}
@@ -185,6 +196,52 @@ func handler(ctx context.Context, state sfnState) (sfnState, error) {
 	}, nil
 }
 
+// publishGameEnded publica el evento "game.ended" al bus EventBridge custom.
+// stats-recorder lo consume para actualizar las stats globales del leaderboard.
+func publishGameEnded(ctx context.Context, roomID string, players []internaldynamo.PlayerRecord) error {
+	// Determinar ganador: el jugador con mayor score.
+	maxScore := -1
+	for _, p := range players {
+		if p.Score > maxScore {
+			maxScore = p.Score
+		}
+	}
+
+	type playerResult struct {
+		PlayerID string `json:"playerId"`
+		Username string `json:"username"`
+		Score    int    `json:"score"`
+		IsWinner bool   `json:"isWinner"`
+	}
+	results := make([]playerResult, len(players))
+	for i, p := range players {
+		results[i] = playerResult{
+			PlayerID: p.PlayerID,
+			Username: p.Username,
+			Score:    p.Score,
+			IsWinner: p.Score == maxScore && maxScore >= 0,
+		}
+	}
+
+	detail, err := json.Marshal(map[string]interface{}{
+		"roomId":  roomID,
+		"players": results,
+	})
+	if err != nil {
+		return fmt.Errorf("marshal detail: %w", err)
+	}
+
+	_, err = ebClient.PutEvents(ctx, &eventbridge.PutEventsInput{
+		Entries: []ebtypes.PutEventsRequestEntry{{
+			EventBusName: aws.String(os.Getenv("EVENTBRIDGE_BUS_NAME")),
+			Source:       aws.String("quizarena"),
+			DetailType:   aws.String("game.ended"),
+			Detail:       aws.String(string(detail)),
+		}},
+	})
+	return err
+}
+
 // broadcastToAll envía en paralelo a todos los jugadores.
 func broadcastToAll(ctx context.Context, players []internaldynamo.PlayerRecord, msg wsevents.OutboundMessage) {
 	var wg sync.WaitGroup
@@ -224,6 +281,7 @@ func ensureClients(ctx context.Context) error {
 			return
 		}
 		dbClient = dynamodb.NewFromConfig(cfg)
+		ebClient = eventbridge.NewFromConfig(cfg)
 
 		poster, err := wsapi.NewClient(ctx)
 		if err != nil {

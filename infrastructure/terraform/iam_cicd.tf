@@ -260,6 +260,28 @@ resource "aws_iam_role_policy" "github_actions_deploy" {
         Resource = "arn:aws:states:${var.aws_region}:${data.aws_caller_identity.current.account_id}:stateMachine:${var.project_name}-*"
       },
 
+      # EventBridge: gestionar buses y reglas del proyecto (M4)
+      {
+        Effect = "Allow"
+        Action = [
+          "events:CreateEventBus",
+          "events:DeleteEventBus",
+          "events:DescribeEventBus",
+          "events:PutRule",
+          "events:DeleteRule",
+          "events:DescribeRule",
+          "events:PutTargets",
+          "events:RemoveTargets",
+          "events:ListTagsForResource",
+          "events:TagResource",
+          "events:UntagResource",
+        ]
+        Resource = [
+          "arn:aws:events:${var.aws_region}:${data.aws_caller_identity.current.account_id}:event-bus/${var.project_name}-*",
+          "arn:aws:events:${var.aws_region}:${data.aws_caller_identity.current.account_id}:rule/${var.project_name}-*",
+        ]
+      },
+
       # states:ValidateStateMachineDefinition es una acción global — no acepta ARN específico.
       # Terraform la llama antes de crear el state machine para validar el JSON ASL.
       {
