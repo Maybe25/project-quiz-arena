@@ -1,7 +1,5 @@
 # Lambdas de M4: stats-recorder
-# GET_LEADERBOARD lo maneja quiz-engine (ya tiene DynamoDB + WS access).
 
-# --- IAM: stats-recorder puede escribir en DynamoDB ---
 resource "aws_iam_role_policy" "lambda_stats_write" {
   name = "stats-write"
   role = aws_iam_role.lambda_exec.id
@@ -23,7 +21,6 @@ resource "aws_iam_role_policy" "lambda_stats_write" {
   })
 }
 
-# --- IAM: round-ender puede publicar eventos a EventBridge ---
 resource "aws_iam_role_policy" "lambda_eventbridge_publish" {
   name = "eventbridge-publish"
   role = aws_iam_role.lambda_exec.id
@@ -38,20 +35,18 @@ resource "aws_iam_role_policy" "lambda_eventbridge_publish" {
   })
 }
 
-# --- ZIP ---
 data "archive_file" "stats_recorder" {
   type        = "zip"
-  source_file = "${path.module}/../../bin/stats-recorder/bootstrap"
-  output_path = "${path.module}/../../bin/stats-recorder/function.zip"
+  source_dir  = "${path.module}/../../bin/stats-recorder"
+  output_path = "${path.module}/../../bin/stats-recorder.zip"
 }
 
-# --- Lambda stats-recorder ---
 resource "aws_lambda_function" "stats_recorder" {
   function_name    = "${var.project_name}-${var.environment}-stats-recorder"
   role             = aws_iam_role.lambda_exec.arn
-  runtime          = "provided.al2023"
-  architectures    = ["arm64"]
-  handler          = "bootstrap"
+  runtime          = "python3.12"
+  architectures    = ["x86_64"]
+  handler          = "handler.handler"
   filename         = data.archive_file.stats_recorder.output_path
   source_code_hash = data.archive_file.stats_recorder.output_base64sha256
   memory_size      = var.lambda_memory_mb

@@ -1,46 +1,43 @@
 #!/usr/bin/env bash
-# build.sh — Compila todas las Lambdas Go para ARM64 (Graviton2 / provided.al2023)
+# build.sh — Empaqueta todas las Lambdas Python para AWS Lambda
 #
-# Variables de entorno críticas:
-#   GOOS=linux      → compilar para Linux (Lambda corre en Linux, no Windows)
-#   GOARCH=arm64    → arquitectura ARM64 (Graviton2, ~20% más barato)
-#   CGO_ENABLED=0   → binario estático sin dependencias del sistema
+# Estrategia:
+#   Para cada Lambda, crea bin/<name>/ con:
+#     - handler.py       (el handler de la Lambda)
+#     - shared/          (librería compartida: dynamo, wsapi, events)
 #
-# El binario DEBE llamarse "bootstrap" — es lo que Lambda busca al iniciar.
+#   Terraform luego zipea bin/<name>/ y lo sube a Lambda.
+#   No hay compilación — Python usa el runtime de Lambda directamente.
 
-set -euo pipefail # Salir si algún comando falla
+set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 BIN_DIR="$REPO_ROOT/bin"
+SHARED_DIR="$REPO_ROOT/shared"
 
-build_lambda() {
+package_lambda() {
   local name="$1"
-  local src="$REPO_ROOT/lambdas/$name"
-  local out="$BIN_DIR/$name/bootstrap"
+  local out="$BIN_DIR/$name"
 
-  echo "→ Compilando $name..."
-  mkdir -p "$BIN_DIR/$name"
+  echo "→ Empaquetando $name..."
+  rm -rf "$out"
+  mkdir -p "$out"
 
-  GOOS=linux GOARCH=arm64 CGO_ENABLED=0 \
-    go build \
-    -tags lambda.norpc \
-    -ldflags="-s -w" \
-    -o "$out" \
-    "$src/handler.go"
+  cp "$REPO_ROOT/lambdas/$name/handler.py" "$out/handler.py"
+  cp -r "$SHARED_DIR" "$out/shared"
 
-  echo "  ✓ $out"
+  echo "  ✓ $out/"
 }
 
-# Lista de Lambdas a compilar
-build_lambda "ws-connect"
-build_lambda "ws-disconnect"
-build_lambda "ws-message"
-build_lambda "room-manager"
-build_lambda "broadcaster"
-build_lambda "quiz-engine"
-build_lambda "round-ender"
-build_lambda "stats-recorder"
+package_lambda "ws-connect"
+package_lambda "ws-disconnect"
+package_lambda "ws-message"
+package_lambda "room-manager"
+package_lambda "broadcaster"
+package_lambda "quiz-engine"
+package_lambda "round-ender"
+package_lambda "stats-recorder"
 
 echo ""
-echo "Build completo. Binarios en $BIN_DIR/"
+echo "Build completo. Paquetes en $BIN_DIR/"
 echo "Siguiente paso: cd infrastructure/terraform && terraform apply"

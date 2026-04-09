@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd.exe /c \"gh auth status 2>&1\")",
+      "Bash(cmd.exe /c \"gh run list --repo Maybe25/project-quiz-arena 2>&1\")",
+      "Bash(cmd.exe /c \"gh run list --repo Maybe25/project-quiz-arena --limit 5 2>&1 & echo EXIT:%errorlevel%\")",
+      "Bash(gh run:*)",
+      "Bash(cmd.exe /c \"where gh\")",
+      "Bash(cmd.exe /c \"C:\\\\\\\\Users\\\\\\\\Javier\\\\\\\\AppData\\\\\\\\Local\\\\\\\\GitHub\\\\\\\\cli\\\\\\\\bin\\\\\\\\gh.exe run list --repo Maybe25/project-quiz-arena --limit 5 2>&1\")",
+      "Bash(cmd.exe /c \"dir \\\\\"C:\\\\\\\\Program Files\\\\\\\\GitHub CLI\\\\\\\\\\\\\" 2>&1 & dir \\\\\"C:\\\\\\\\Users\\\\\\\\Javier\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Programs\\\\\\\\\\\\\" 2>&1\")",
+      "Bash(cmd.exe /c \"powershell -Command \\\\\"Get-Command gh -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source\\\\\"\")",
+      "Bash(cmd.exe /c \"gh run list --repo Maybe25/project-quiz-arena --limit 5 2>&1\")",
+      "Bash(cmd.exe /c \"powershell -Command \\\\\"& gh run list --repo Maybe25/project-quiz-arena --limit 5\\\\\"\")",
+      "Bash(cmd.exe /c \"powershell -NoProfile -Command \\\\\"gh run list --repo Maybe25/project-quiz-arena --limit 5\\\\\"\")",
+      "Bash(go mod:*)",
+      "Bash(bash scripts/build.sh)",
+      "Read(//d/D/Antigravity/project-websocket/lambdas/round-ender/**)",
+      "Read(//d/D/Antigravity/project-websocket/lambdas/stats-recorder/**)",
+      "Read(//d/D/Antigravity/project-websocket/**)",
+      "Bash(rm -f go.work go.work.sum)",
+      "Bash(rm -f internal/go.mod internal/go.sum)",
+      "Bash(rm -f lambdas/ws-connect/go.mod lambdas/ws-connect/go.sum)",
+      "Bash(rm -f lambdas/ws-disconnect/go.mod lambdas/ws-disconnect/go.sum)",
+      "Bash(rm -f lambdas/ws-message/go.mod lambdas/ws-message/go.sum)"
+    ]
+  }
+}

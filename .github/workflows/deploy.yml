@@ -1,12 +1,3 @@
-# Deploy — se ejecuta cuando se hace merge a main
-#
-# Qué hace:
-#   1. Compila todas las Lambdas Go para Linux ARM64
-#   2. Ejecuta terraform apply — despliega los cambios en AWS
-#
-# El deploy es automático en merge a main (entorno dev).
-# Para prod, agrega un environment con required_reviewers en GitHub.
-
 name: Deploy
 
 on:
@@ -19,7 +10,6 @@ permissions:
   contents: read
 
 env:
-  GO_VERSION: "1.24"
   TF_VERSION: "1.7.0"
   AWS_REGION: "us-east-1"
 
@@ -28,32 +18,11 @@ jobs:
     name: Deploy to AWS
     runs-on: ubuntu-latest
 
-    # environment: dev
-    # Descomenta la línea de arriba y configura el environment en GitHub
-    # (Settings → Environments → dev) para agregar aprobación manual.
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: ${{ env.GO_VERSION }}
-          cache: true
-
-      - name: Download dependencies
-        run: |
-          cd internal                && go mod download && cd ..
-          cd lambdas/ws-connect      && go mod download && cd ../..
-          cd lambdas/ws-disconnect   && go mod download && cd ../..
-          cd lambdas/ws-message      && go mod download && cd ../..
-          cd lambdas/room-manager    && go mod download && cd ../..
-          cd lambdas/broadcaster     && go mod download && cd ../..
-          cd lambdas/quiz-engine     && go mod download && cd ../..
-          cd lambdas/round-ender     && go mod download && cd ../..
-
-      - name: Build all Lambdas (Linux ARM64)
+      - name: Package Lambdas (Python)
         run: bash scripts/build.sh
 
       - name: Configure AWS credentials (OIDC)
@@ -82,10 +51,6 @@ jobs:
         working-directory: infrastructure/terraform
         run: terraform apply -auto-approve
 
-      # Sincronizar preguntas al bucket S3.
-      # aws s3 sync es idempotente: solo sube los archivos que cambiaron.
-      # Si el contenido es idéntico, no hace ninguna request de escritura.
-      # El bucket name lo leemos del output de Terraform para no hardcodearlo.
       - name: Sync questions to S3
         working-directory: infrastructure/terraform
         run: |
@@ -95,7 +60,6 @@ jobs:
             --only-show-errors
           echo "✓ Questions synced to s3://$BUCKET/questions/"
 
-      # Mostrar outputs útiles al final del deploy (URL del WebSocket, etc.)
       - name: Show deployment outputs
         working-directory: infrastructure/terraform
         run: terraform output
