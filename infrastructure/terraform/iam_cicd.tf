@@ -50,9 +50,12 @@ resource "aws_iam_role" "github_actions" {
           "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
         }
         StringLike = {
-          # Formato: repo:<usuario>/<repo>:*
-          # El * permite cualquier rama o tag. Restringe a "ref:refs/heads/main" en prod.
-          "token.actions.githubusercontent.com:sub" = "repo:Maybe25/project-quiz-arena:*"
+          # Ambos repos de QuizArena comparten este role.
+          # El * permite cualquier rama. Restringe a "ref:refs/heads/main" en prod.
+          "token.actions.githubusercontent.com:sub" = [
+            "repo:Maybe25/project-quiz-arena:*",
+            "repo:Maybe25/project-quiz-arena-front:*",
+          ]
         }
       }
     }]
@@ -308,6 +311,78 @@ resource "aws_iam_role_policy" "github_actions_deploy" {
       {
         Effect   = "Allow"
         Action   = ["sts:GetCallerIdentity"]
+        Resource = "*"
+      },
+
+      # S3: gestionar los buckets estáticos del frontend (shell + 3 MFEs)
+      # quizarena-shell-prod, quizarena-mfe-home-prod, quizarena-mfe-game-prod, quizarena-mfe-leaderboard-prod
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:CreateBucket",
+          "s3:DeleteBucket",
+          "s3:GetBucketAcl",
+          "s3:GetBucketVersioning",
+          "s3:PutBucketVersioning",
+          "s3:GetBucketPublicAccessBlock",
+          "s3:PutBucketPublicAccessBlock",
+          "s3:GetBucketPolicy",
+          "s3:PutBucketPolicy",
+          "s3:DeleteBucketPolicy",
+          "s3:ListBucket",
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+          "s3:GetBucketTagging",
+          "s3:PutBucketTagging",
+          "s3:GetBucketWebsite",
+          "s3:PutBucketWebsite",
+          "s3:DeleteBucketWebsite",
+          "s3:GetBucketLogging",
+          "s3:GetBucketRequestPayment",
+          "s3:GetBucketCORS",
+          "s3:GetAccelerateConfiguration",
+          "s3:GetEncryptionConfiguration",
+          "s3:GetBucketObjectLockConfiguration",
+          "s3:GetLifecycleConfiguration",
+          "s3:GetReplicationConfiguration",
+        ]
+        Resource = [
+          "arn:aws:s3:::${var.project_name}-shell-prod",
+          "arn:aws:s3:::${var.project_name}-shell-prod/*",
+          "arn:aws:s3:::${var.project_name}-mfe-home-prod",
+          "arn:aws:s3:::${var.project_name}-mfe-home-prod/*",
+          "arn:aws:s3:::${var.project_name}-mfe-game-prod",
+          "arn:aws:s3:::${var.project_name}-mfe-game-prod/*",
+          "arn:aws:s3:::${var.project_name}-mfe-leaderboard-prod",
+          "arn:aws:s3:::${var.project_name}-mfe-leaderboard-prod/*",
+        ]
+      },
+
+      # CloudFront: crear y gestionar las 4 distribuciones del frontend
+      # CloudFront es global (sin región), los ARNs usan arn:aws:cloudfront::
+      {
+        Effect = "Allow"
+        Action = [
+          "cloudfront:CreateDistribution",
+          "cloudfront:UpdateDistribution",
+          "cloudfront:DeleteDistribution",
+          "cloudfront:GetDistribution",
+          "cloudfront:GetDistributionConfig",
+          "cloudfront:ListDistributions",
+          "cloudfront:TagResource",
+          "cloudfront:UntagResource",
+          "cloudfront:ListTagsForResource",
+          "cloudfront:CreateOriginAccessControl",
+          "cloudfront:UpdateOriginAccessControl",
+          "cloudfront:DeleteOriginAccessControl",
+          "cloudfront:GetOriginAccessControl",
+          "cloudfront:GetOriginAccessControlConfig",
+          "cloudfront:ListOriginAccessControls",
+          "cloudfront:CreateInvalidation",
+          "cloudfront:GetInvalidation",
+          "cloudfront:ListInvalidations",
+        ]
         Resource = "*"
       }
     ]
