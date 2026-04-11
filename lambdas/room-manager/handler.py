@@ -61,6 +61,8 @@ def handle_create_room(db, ws, msg):
     dynamo_room.update_connection_room(db, msg["connectionId"], room_id, player_id)
 
     wsapi.post_message(ws, msg["connectionId"], outbound(TYPE_ROOM_CREATED, {
+        "playerId": player_id,
+        "username": player["username"],
         "room": {"roomId": room_id, "roomCode": room_code, "status": "waiting", "hostPlayerId": player_id},
         "players": [{"playerId": player_id, "username": player["username"], "score": 0, "isReady": False}],
     }))
@@ -87,6 +89,8 @@ def handle_join_room(db, ws, msg):
     players = dynamo_room.list_players_in_room(db, room["roomId"])
 
     wsapi.post_message(ws, msg["connectionId"], outbound(TYPE_ROOM_JOINED, {
+        "playerId": player_id,
+        "username": player["username"],
         "room": {"roomId": room["roomId"], "roomCode": room["roomCode"],
                  "status": room["status"], "hostPlayerId": room["hostPlayerId"]},
         "players": to_player_infos(players),
