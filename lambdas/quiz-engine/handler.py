@@ -103,15 +103,19 @@ def handle_start_game(db, s3, sfn, ws, msg):
     dynamo_game.update_room_status(db, conn["roomId"], "playing")
     players = dynamo_room.list_players_in_room(db, conn["roomId"])
 
-    broadcast_to_all(ws, players, outbound(TYPE_GAME_STARTING))
-
+    # ROUND_START se envía ANTES de GAME_STARTING para que el estado quede
+    # cargado en el shell antes de que el lobby navegue a /game/play.
+    # Sin este orden, el GameComponent puede ver currentRound()=null y redirigir al lobby.
     first_q = selected[0]
     broadcast_to_all(ws, players, outbound(TYPE_ROUND_START, {
         "roundNumber": 1,
         "roundId":     "ROUND#001",
+        "totalRounds": total_rounds,
         "question":    {"questionId": first_q["id"], "text": first_q["text"], "options": first_q["options"]},
         "timeLimitMs": first_q["timeLimitMs"],
     }))
+
+    broadcast_to_all(ws, players, outbound(TYPE_GAME_STARTING))
 
     execution_name = f"{conn['roomId']}-{int(time.time() * 1000)}"
     sfn.start_execution(

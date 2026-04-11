@@ -55,8 +55,10 @@ def handle_create_room(db, ws, msg):
             "hostPlayerId": player_id, "maxPlayers": 8}
     dynamo_room.save_room(db, room)
 
+    payload  = msg.get("payload") or {}
+    username = (payload.get("username") or "").strip()[:20] or f"Player-{msg['connectionId'][:6]}"
     player = {"playerId": player_id, "connectionId": msg["connectionId"],
-              "username": f"Player-{msg['connectionId'][:6]}", "score": 0, "isReady": False}
+              "username": username, "score": 0, "isReady": False}
     dynamo_room.save_player_in_room(db, room_id, player)
     dynamo_room.update_connection_room(db, msg["connectionId"], room_id, player_id)
 
@@ -81,8 +83,9 @@ def handle_join_room(db, ws, msg):
         return
 
     player_id = player_id_from_conn(msg["connectionId"])
+    username  = (payload.get("username") or "").strip()[:20] or f"Player-{msg['connectionId'][:6]}"
     player = {"playerId": player_id, "connectionId": msg["connectionId"],
-              "username": f"Player-{msg['connectionId'][:6]}", "score": 0, "isReady": False}
+              "username": username, "score": 0, "isReady": False}
     dynamo_room.save_player_in_room(db, room["roomId"], player)
     dynamo_room.update_connection_room(db, msg["connectionId"], room["roomId"], player_id)
 
