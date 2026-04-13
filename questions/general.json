@@ -68,5 +68,285 @@
     "options": ["150,000 km/s", "200,000 km/s", "300,000 km/s", "400,000 km/s"],
     "correct": 2,
     "timeLimitMs": 30000
+  },
+  {
+    "id": "q011",
+    "text": "¿Cuántos continentes tiene la Tierra?",
+    "options": ["5", "6", "7", "8"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q012",
+    "text": "¿Cuál es el río más largo del mundo?",
+    "options": ["Amazonas", "Nilo", "Yangtsé", "Misisipi"],
+    "correct": 1,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q013",
+    "text": "¿Qué planeta es conocido como el Planeta Rojo?",
+    "options": ["Venus", "Júpiter", "Marte", "Saturno"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q014",
+    "text": "¿Cuántos huesos tiene el cuerpo humano adulto?",
+    "options": ["186", "206", "226", "246"],
+    "correct": 1,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q015",
+    "text": "¿Cuál es el idioma más hablado del mundo?",
+    "options": ["Inglés", "Español", "Mandarín", "Hindi"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q016",
+    "text": "¿Quién pintó la Mona Lisa?",
+    "options": ["Miguel Ángel", "Rafael", "Leonardo da Vinci", "Botticelli"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q017",
+    "text": "¿Cuál es la montaña más alta del mundo?",
+    "options": ["K2", "Kangchenjunga", "Monte Everest", "Lhotse"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q018",
+    "text": "¿En qué país se originó el sushi?",
+    "options": ["China", "Corea", "Tailandia", "Japón"],
+    "correct": 3,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q019",
+    "text": "¿Cuántos colores tiene el arcoíris?",
+    "options": ["5", "6", "7", "8"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q020",
+    "text": "¿Cuál es el animal terrestre más rápido?",
+    "options": ["León", "Guepardo", "Antílope", "Caballo"],
+    "correct": 1,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q021",
+    "text": "¿Qué gas es el más abundante en la atmósfera terrestre?",
+    "options": ["Oxígeno", "Dióxido de carbono", "Nitrógeno", "Argón"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q022",
+    "text": "¿Cuántos jugadores tiene un equipo de fútbol en el campo?",
+    "options": ["9", "10", "11", "12"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q023",
+    "text": "¿Cuál es el planeta más grande del Sistema Solar?",
+    "options": ["Saturno", "Neptuno", "Urano", "Júpiter"],
+    "correct": 3,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q024",
+    "text": "¿Qué científico formuló la teoría de la relatividad?",
+    "options": ["Isaac Newton", "Nikola Tesla", "Albert Einstein", "Stephen Hawking"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q025",
+    "text": "¿Cuántas teclas tiene un piano estándar?",
+    "options": ["72", "76", "88", "96"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q026",
+    "text": "¿En qué año se fundó la empresa Apple?",
+    "options": ["1974", "1976", "1978", "1980"],
+    "correct": 1,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q027",
+    "text": "¿Cuál es el país con más islas del mundo?",
+    "options": ["Indonesia", "Filipinas", "Canadá", "Suecia"],
+    "correct": 3,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q028",
+    "text": "¿Qué animal es el símbolo de la paz?",
+    "options": ["Paloma", "Águila", "Ciervo", "Cisne"],
+    "correct": 0,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q029",
+    "text": "¿Cuántos segundos tiene una hora?",
+    "options": ["2400", "3000", "3600", "4200"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q030",
+    "text": "¿Cuál es el deporte más popular del mundo?",
+    "options": ["Baloncesto", "Béisbol", "Fútbol", "Cricket"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q031",
+    "text": "¿Qué moneda usa Japón?",
+    "options": ["Yuan", "Won", "Yen", "Baht"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q032",
+    "text": "¿Cuál es el órgano más grande del cuerpo humano?",
+    "options": ["Hígado", "Cerebro", "Pulmón", "Piel"],
+    "correct": 3,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q033",
+    "text": "¿Quién fue el primer presidente de los Estados Unidos?",
+    "options": ["Abraham Lincoln", "Thomas Jefferson", "George Washington", "John Adams"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q034",
+    "text": "¿Cuántos lados tiene un triángulo?",
+    "options": ["2", "3", "4", "5"],
+    "correct": 1,
+    "timeLimitMs": 20000
+  },
+  {
+    "id": "q035",
+    "text": "¿Cuál es el metal más pesado del mundo?",
+    "options": ["Plomo", "Hierro", "Osmio", "Platino"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q036",
+    "text": "¿En qué continente está Egipto?",
+    "options": ["Asia", "Europa", "África", "Oriente Medio"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q037",
+    "text": "¿Cuántos gramos tiene un kilogramo?",
+    "options": ["100", "500", "1000", "10000"],
+    "correct": 2,
+    "timeLimitMs": 20000
+  },
+  {
+    "id": "q038",
+    "text": "¿Qué planeta tiene los anillos más visibles?",
+    "options": ["Júpiter", "Urano", "Neptuno", "Saturno"],
+    "correct": 3,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q039",
+    "text": "¿Cuál es la capital de Brasil?",
+    "options": ["São Paulo", "Río de Janeiro", "Brasilia", "Salvador"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q040",
+    "text": "¿Quién inventó la bombilla eléctrica?",
+    "options": ["Nikola Tesla", "Thomas Edison", "Alexander Graham Bell", "Benjamin Franklin"],
+    "correct": 1,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q041",
+    "text": "¿Cuántos días tiene un año bisiesto?",
+    "options": ["364", "365", "366", "367"],
+    "correct": 2,
+    "timeLimitMs": 20000
+  },
+  {
+    "id": "q042",
+    "text": "¿Cuál es la ciudad más poblada del mundo?",
+    "options": ["Pekín", "Mumbai", "Tokio", "Ciudad de México"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q043",
+    "text": "¿Qué instrumento musical tiene 6 cuerdas de forma estándar?",
+    "options": ["Violín", "Guitarra", "Banjo", "Mandolina"],
+    "correct": 1,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q044",
+    "text": "¿Cuál es el símbolo químico del agua?",
+    "options": ["HO", "H2O", "OH2", "H3O"],
+    "correct": 1,
+    "timeLimitMs": 20000
+  },
+  {
+    "id": "q045",
+    "text": "¿En qué año comenzó la Primera Guerra Mundial?",
+    "options": ["1912", "1914", "1916", "1918"],
+    "correct": 1,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q046",
+    "text": "¿Cuál es el animal más grande del mundo?",
+    "options": ["Elefante africano", "Tiburón ballena", "Ballena azul", "Jirafa"],
+    "correct": 2,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q047",
+    "text": "¿Cuántos colores tiene la bandera de Colombia?",
+    "options": ["2", "3", "4", "5"],
+    "correct": 1,
+    "timeLimitMs": 20000
+  },
+  {
+    "id": "q048",
+    "text": "¿Qué país tiene más hablantes de español como lengua nativa?",
+    "options": ["España", "Argentina", "Colombia", "México"],
+    "correct": 3,
+    "timeLimitMs": 30000
+  },
+  {
+    "id": "q049",
+    "text": "¿Cuántos metros tiene un kilómetro?",
+    "options": ["100", "500", "1000", "1500"],
+    "correct": 2,
+    "timeLimitMs": 20000
+  },
+  {
+    "id": "q050",
+    "text": "¿Cuál es la moneda oficial de la Unión Europea?",
+    "options": ["Franco", "Marco", "Euro", "Corona"],
+    "correct": 2,
+    "timeLimitMs": 20000
   }
 ]
