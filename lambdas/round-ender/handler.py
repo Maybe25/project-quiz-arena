@@ -76,6 +76,24 @@ def handler(event, context):
 
     logger.info(json.dumps({"event": "round-ending", "roomId": room_id, "round": current_round, "total": total_rounds}))
 
+    # Idempotency guard: si ya fue procesada (por el trigger temprano), salir sin hacer nada.
+    if not dynamo_game.try_mark_round_ended(db, room_id, current_round):
+        logger.info(json.dumps({"event": "round-already-ended", "roomId": room_id, "round": current_round}))
+        # Devolver el estado que el Choice state necesita para continuar o terminar.
+        if current_round >= total_rounds:
+            return {"hasMoreRounds": False}
+        next_round = current_round + 1
+        next_data  = dynamo_game.get_round(db, room_id, next_round)
+        if not next_data:
+            return {"hasMoreRounds": False}
+        return {
+            "roomId":               room_id,
+            "currentRound":         next_round,
+            "totalRounds":          total_rounds,
+            "roundDurationSeconds": int(next_data["timeLimitMs"]) // 1000,
+            "hasMoreRounds":        True,
+        }
+
     round_data = dynamo_game.get_round(db, room_id, current_round)
     if not round_data:
         raise RuntimeError(f"Ronda {current_round} no encontrada en sala {room_id}")

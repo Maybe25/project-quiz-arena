@@ -60,6 +60,20 @@ resource "aws_iam_role_policy" "lambda_sfn_start" {
   })
 }
 
+resource "aws_iam_role_policy" "lambda_invoke_round_ender" {
+  name = "invoke-round-ender"
+  role = aws_iam_role.lambda_exec.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = ["lambda:InvokeFunction"]
+      Resource = aws_lambda_function.round_ender.arn
+    }]
+  })
+}
+
 data "archive_file" "quiz_engine" {
   type        = "zip"
   source_dir  = "${path.module}/../../bin/quiz-engine"
@@ -90,6 +104,7 @@ resource "aws_lambda_function" "quiz_engine" {
       S3_QUESTIONS_BUCKET = aws_s3_bucket.questions.bucket
       S3_QUESTIONS_KEY    = "questions/general.json"
       SFN_ROUND_TIMER_ARN = aws_sfn_state_machine.round_timer.arn
+      ROUND_ENDER_ARN     = aws_lambda_function.round_ender.arn
     }
   }
 }

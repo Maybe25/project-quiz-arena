@@ -18,6 +18,12 @@ def room_round_sk(round_number):   return f"ROUND#{round_number:03d}"
 def room_answer_sk(round_number, player_id):
     return f"ROUND#{round_number:03d}#ANSWER#{player_id}"
 
+def room_ready_sk(round_number, player_id):
+    return f"ROUND#{round_number:03d}#READY#{player_id}"
+
+def room_round_ended_sk(round_number):
+    return f"ROUND#{round_number:03d}#ENDED"
+
 # --- Jugadores ---
 def player_pk(player_id):          return f"PLAYER#{player_id}"
 def player_profile_sk():           return "METADATA"

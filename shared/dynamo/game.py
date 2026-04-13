@@ -1,7 +1,7 @@
 import time
 from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError
-from .keys import table_name, room_pk, room_round_sk, room_answer_sk
+from .keys import table_name, room_pk, room_round_sk, room_answer_sk, room_ready_sk, room_round_ended_sk
 
 
 def save_round(db, room_id, round_data):
@@ -78,6 +78,60 @@ def add_player_score(db, room_id, player_id, points):
         UpdateExpression="ADD score :pts",
         ExpressionAttributeValues={":pts": points},
     )
+
+
+def mark_player_ready(db, room_id, round_number, player_id):
+    """Registra que un jugador marcó Listo — idempotente."""
+    table = db.Table(table_name())
+    try:
+        table.put_item(
+            Item={
+                "PK":          room_pk(room_id),
+                "SK":          room_ready_sk(round_number, player_id),
+                "playerId":    player_id,
+                "roundNumber": round_number,
+                "markedAt":    int(time.time() * 1000),
+            },
+            ConditionExpression="attribute_not_exists(SK)",
+        )
+    except ClientError as e:
+        if e.response["Error"]["Code"] == "ConditionalCheckFailedException":
+            return  # ya marcó listo, ignorar
+        raise
+
+
+def get_ready_count(db, room_id, round_number):
+    """Retorna cuántos jugadores han marcado Listo en esta ronda."""
+    table = db.Table(table_name())
+    prefix = f"ROUND#{round_number:03d}#READY#"
+    resp = table.query(
+        KeyConditionExpression=Key("PK").eq(room_pk(room_id)) & Key("SK").begins_with(prefix),
+        Select="COUNT",
+    )
+    return resp.get("Count", 0)
+
+
+def try_mark_round_ended(db, room_id, round_number):
+    """
+    Intenta marcar la ronda como terminada de forma atómica.
+    Retorna True si esta llamada fue la primera (puede proceder).
+    Retorna False si la ronda ya fue terminada (evitar doble ROUND_END).
+    """
+    table = db.Table(table_name())
+    try:
+        table.put_item(
+            Item={
+                "PK":       room_pk(room_id),
+                "SK":       room_round_ended_sk(round_number),
+                "endedAt":  int(time.time() * 1000),
+            },
+            ConditionExpression="attribute_not_exists(SK)",
+        )
+        return True
+    except ClientError as e:
+        if e.response["Error"]["Code"] == "ConditionalCheckFailedException":
+            return False  # ya terminó, ignorar
+        raise
 
 
 def calc_points(is_correct, answered_at_ms, round_started_at_ms, time_limit_ms):
